@@ -8,11 +8,11 @@ El lazy loading nos permite mejorar el performance de nuestras aplicaciones, ya 
 import { Navigation } from "./routes/Navigation";
 
 function App() {
-	return (
-		<>
-			<Navigation />
-		</>
-	);
+  return (
+    <>
+      <Navigation />
+    </>
+  );
 }
 
 export default App;
