@@ -363,3 +363,8 @@ Y ya con esto se pueden pasar los estilos de la siguiente forma:
 </ProductCard>
 ```
 
+
+## Control Props
+
+Esto lo que nos permite es darle un mejor manejo a nuestros inputs sin pasar objetos reactivos de forma indirecta para que se actualicen.
+
