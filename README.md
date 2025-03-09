@@ -332,3 +332,35 @@ export const ProductTitle = ({ title }: { title?: string }) => {
 };
 ```
 
+
+## Extensible Styles
+
+Esto nos permite poder realizar modificaciones personalizadas mediante clases para nuestros componentes. Nos permite pasarles estilos o clases prefabricadas para alterar su diseño dependiendo de nuestra necesidad.
+
+Para hacerlo podemos crear interfaces que acepten props como `className` y `style`, aquí un ejemplo:
+
+```ts
+export interface Props {
+	children?: ReactElement | ReactElement[];
+	className?: string;
+	product: Product;
+	style?: React.CSSProperties;
+}
+```
+
+Y ya con esto se pueden pasar los estilos de la siguiente forma:
+
+```jsx
+<ProductCard
+	className="text-white"
+	product={ product }
+	style={{
+		backgroundColor: red
+	}}
+>
+	<ProductImage  />
+	<ProductTitle  />
+	<ProductButtons  />
+</ProductCard>
+```
+
