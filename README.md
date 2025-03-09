@@ -341,10 +341,10 @@ Para hacerlo podemos crear interfaces que acepten props como `className` y `styl
 
 ```ts
 export interface Props {
-	children?: ReactElement | ReactElement[];
-	className?: string;
-	product: Product;
-	style?: React.CSSProperties;
+    children?: ReactElement | ReactElement[];
+    className?: string;
+    product: Product;
+    style?: React.CSSProperties;
 }
 ```
 
@@ -352,15 +352,14 @@ Y ya con esto se pueden pasar los estilos de la siguiente forma:
 
 ```jsx
 <ProductCard
-	className="text-white"
-	product={ product }
-	style={{
-		backgroundColor: red
-	}}
+    className="bg-dark text-white"
+    product={ product }
 >
-	<ProductImage  />
-	<ProductTitle  />
-	<ProductButtons  />
+    <ProductCard.Image className="custom-image" />
+
+    <ProductCard.Title className="text-bold" title={ "Hola Mundo" } />
+
+    <ProductCard.Buttons className="custom-buttons" />
 </ProductCard>
 ```
 
