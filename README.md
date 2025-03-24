@@ -368,3 +368,8 @@ Y ya con esto se pueden pasar los estilos de la siguiente forma:
 
 Esto lo que nos permite es darle un mejor manejo a nuestros inputs sin pasar objetos reactivos de forma indirecta para que se actualicen.
 
+
+# State initializer + Function Child = Render Props
+
+Es una implementación propia de lo que hace Formik. Esto permite recibir los argumentos y retornar una función que retorna un componente, haciendo así más fácil el manejo de estados y demás en nuestros formularios.
+
