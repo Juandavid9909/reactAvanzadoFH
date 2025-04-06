@@ -373,3 +373,96 @@ Esto lo que nos permite es darle un mejor manejo a nuestros inputs sin pasar obj
 
 Es una implementación propia de lo que hace Formik. Esto permite recibir los argumentos y retornar una función que retorna un componente, haciendo así más fácil el manejo de estados y demás en nuestros formularios.
 
+
+# Desplegar paquete de componentes
+
+## 1. Crear proyecto de tsdx
+
+```bash
+npx tsdx create nombre-proyecto
+
+# Seleccionar react o react-storybook dependiendo de lo que necesitemos
+```
+
+
+## 2. Configurar todo nuestro proyecto con los archivos que queremos exportar
+
+Se organiza todo lo que queramos exportar en nuestro paquete, como interfaces, componentes, hooks, etc. Es importante aclarar que en el index.tsx debemos tener nuestro export default para los componentes principales.
+
+
+## 3. Configurar módulos
+
+Primero tendremos que instalar los siguientes paquetes:
+
+```bash
+yarn add -D postcss rollup-plugin-postcss @rollup/plugin-image
+```
+
+Luego configurar el archivo de tipado `typings.d.ts` en la raíz del proyecto:
+
+```typescript
+declare  module  "*.css" {
+    const  content: { [className: string]: string };
+    export  default  content;
+}
+
+declare  module  "*.jpg" {
+    const  value: any;
+    export  default  value;
+}
+```
+
+Y por último crear el archivo `tsdx.config.js` con el siguiente contenido:
+
+```javascript
+const  postcss  =  require("rollup-plugin-postcss");
+const  images  =  require("@rollup/plugin-image");
+
+module.exports = {
+    rollup(config, options) {
+        config.plugins  = [
+            postcss({ modules: true }),
+            images({ incude: ["**/*.png", "**/*.jpg"] }),
+            ...config.plugins,
+        ];
+
+        return  config;
+    },
+};
+```
+
+
+## Crear build
+
+Podemos crear la versión build ejecutando el comando:
+
+```bash
+tsdx build
+```
+
+
+## Crear y subir a GitHub
+
+Creamos nuestro repositorio en GitHub para subir los archivos, adicional, podemos agregar las siguientes cosas a nuestro `package.json` para darle más información a NPM sobre nuestro paquete:
+
+### Link repositorio
+```json
+"repository": {
+    "url": "nuestra-url",
+    "type": "git"
+}
+```
+
+### Homepage
+```json
+"homepage": "nuestra-pagina-principal"
+```
+
+### Keywords
+```json
+"keywords": [
+    "product",
+    "description"
+]
+```
+
