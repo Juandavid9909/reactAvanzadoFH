@@ -466,3 +466,42 @@ Creamos nuestro repositorio en GitHub para subir los archivos, adicional, podemo
 ]
 ```
 
+
+## Pruebas automatizadas
+
+Para realizar las pruebas automatizadas necesitamos instalar las siguientes dependencias:
+
+```bash
+yarn add --dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
+
+yarn add @types/react @types/react-dom @types/react-test-renderer
+
+# Si tenemos CSS y/o imagenes como módulos
+yarn add -D identity-obj-proxy
+```
+
+Luego añadimos el siguiente objeto a nuestro `package.json`:
+
+```json
+"jest":{
+    "moduleNameMapper": {
+        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|
+m4a|aac|oga)$": "identity-obj-proxy",
+        "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
+}
+```
+
+Y para ejecutar nuestras pruebas podemos agregar el siguiente script:
+
+```json
+"test:watch": "tsdx test --watch",
+```
+
+Ya hecho esto, podremos escribir nuestras pruebas sin inconvenientes y ejecutarlas con el script que agregamos.
+
+
+## Publicar
+
+Tendremos que loguearnos en npm ejecutando el comando `npm login`. Luego subimos nuestros cambios al repositorio de GitHub, junto con esto creamos un tag y una vez hagamos todo esto podremos ejecutar `yarn publish`. Estos mismos pasos se pueden aplicar para actualizar los paquetes de npm.
+
