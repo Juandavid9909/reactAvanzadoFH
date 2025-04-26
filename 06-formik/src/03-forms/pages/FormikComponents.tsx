@@ -1,59 +1,81 @@
-import { useFormik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 
 import "../styles/styles.css";
 
 export const FormikComponents = () => {
-    const { errors, getFieldProps, handleSubmit, touched } = useFormik({
-        initialValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-        },
-        onSubmit: (values) => {
-            console.log(values);
-        },
-        validationSchema: Yup.object({
-            firstName: Yup.string()
-                .max(15, "Must be 15 characters or less")
-                .required("Required"),
-            lastName: Yup.string()
-                .max(10, "Must be 10 characters or less")
-                .required("Required"),
-            email: Yup.string()
-                .email("Invalid email address")
-                .required("Required"),
-        })
-    });
-
     return (
         <div>
             <h1>Formik Components</h1>
 
-            <form onSubmit={ handleSubmit } noValidate>
-                <label htmlFor="firstName">First Name</label>
-                <input
-                    type="text"
-                    { ...getFieldProps("firstName") }
-                />
-                { touched.firstName && errors.firstName && <span>{ errors.firstName }</span> }
+            <Formik
+                initialValues={{
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    terms: false,
+                    jobType: "",
+                }}
+                onSubmit={ (values) => {
+                    console.log(values);
+                } }
+                validationSchema={ Yup.object({
+                    firstName: Yup.string()
+                        .max(15, "Must be 15 characters or less")
+                        .required("Required"),
+                    lastName: Yup.string()
+                        .max(10, "Must be 10 characters or less")
+                        .required("Required"),
+                    email: Yup.string()
+                        .email("Invalid email address")
+                        .required("Required"),
+                    jobType: Yup.string()
+                        .required("Required")
+                        .notOneOf(["it-jr"], "This option is not allowed"),
+                    terms: Yup.boolean()
+                        .oneOf([true], "You must accept terms and conditions"),
+                }) }
+            >
+                {
+                    (formik) => (
+                        <Form>
+                            <label htmlFor="firstName">First Name</label>
+                            <Field name="firstName" type="text" />
+                            <ErrorMessage component="span" name="firstName" />
 
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                    type="text"
-                    { ...getFieldProps("firstName") }
-                />
-                { touched.lastName && errors.lastName && <span>{ errors.lastName }</span> }
+                            <label htmlFor="lastName">Last Name</label>
+                            <Field name="lastName" type="text" />
+                            <ErrorMessage component="span" name="lastName" />
 
-                <label htmlFor="email">Email Address</label>
-                <input
-                    type="email"
-                    { ...getFieldProps("firstName") }
-                />
-                { touched.email && errors.email && <span>{ errors.email }</span> }
+                            <label htmlFor="email">Email</label>
+                            <Field name="email" type="text" />
+                            <ErrorMessage component="span" name="email" />
 
-                <button type="submit">Submit</button>
-            </form>
+                            <label htmlFor="jobType">Job Type</label>
+                            <Field name="jobType" as="select">
+                                <option value="">Pick something</option>
+
+                                <option value="developer">Developer</option>
+
+                                <option value="designer">Designer</option>
+
+                                <option value="it-senior">IT Senior</option>
+
+                                <option value="it-jr">IT Jr.</option>
+                            </Field>
+                            <ErrorMessage component="span" name="jobType" />
+
+                            <label>
+                                <Field name="terms" type="checkbox" />
+                                Terms and conditions
+                            </label>
+                            <ErrorMessage component="span" name="terms" />
+
+                            <button type="submit">Submit</button>
+                        </Form>
+                    )
+                }
+            </Formik>
         </div>
     );
 };
