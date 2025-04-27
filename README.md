@@ -515,7 +515,7 @@ yarn add formik yup
 ```
 
 
-# Yup
+## Yup
 
 Para usar Formik de forma manual con validaciones de Yup podemos seguir el siguiente ejemplo:
 
@@ -576,6 +576,404 @@ export const FormikYupPage = () => {
 
                 <button type="submit">Submit</button>
             </form>
+        </div>
+    );
+};
+```
+
+
+## Formik components
+
+Para evitar tener que hacer todo a mano podemos usar los componentes que nos brinda Formik de la siguiente forma:
+
+```jsx
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from 'yup';
+
+import "../styles/styles.css";
+
+export const FormikComponents = () => {
+    return (
+        <div>
+            <h1>Formik Components</h1>
+
+            <Formik
+                initialValues={{
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    terms: false,
+                    jobType: "",
+                }}
+                onSubmit={ (values) => {
+                    console.log(values);
+                } }
+                validationSchema={ Yup.object({
+                    firstName: Yup.string()
+                        .max(15, "Must be 15 characters or less")
+                        .required("Required"),
+                    lastName: Yup.string()
+                        .max(10, "Must be 10 characters or less")
+                        .required("Required"),
+                    email: Yup.string()
+                        .email("Invalid email address")
+                        .required("Required"),
+                    jobType: Yup.string()
+                        .required("Required")
+                        .notOneOf(["it-jr"], "This option is not allowed"),
+                    terms: Yup.boolean()
+                        .oneOf([true], "You must accept terms and conditions"),
+                }) }
+            >
+                {
+                    (formik) => (
+                        <Form>
+                            <label htmlFor="firstName">First Name</label>
+                            <Field name="firstName" type="text" />
+                            <ErrorMessage component="span" name="firstName" />
+
+                            <label htmlFor="lastName">Last Name</label>
+                            <Field name="lastName" type="text" />
+                            <ErrorMessage component="span" name="lastName" />
+
+                            <label htmlFor="email">Email</label>
+                            <Field name="email" type="text" />
+                            <ErrorMessage component="span" name="email" />
+
+                            <label htmlFor="jobType">Job Type</label>
+                            <Field name="jobType" as="select">
+                                <option value="">Pick something</option>
+
+                                <option value="developer">Developer</option>
+
+                                <option value="designer">Designer</option>
+
+                                <option value="it-senior">IT Senior</option>
+
+                                <option value="it-jr">IT Jr.</option>
+                            </Field>
+                            <ErrorMessage component="span" name="jobType" />
+
+                            <label>
+                                <Field name="terms" type="checkbox" />
+                                Terms and conditions
+                            </label>
+                            <ErrorMessage component="span" name="terms" />
+
+                            <button type="submit">Submit</button>
+                        </Form>
+                    )
+                }
+            </Formik>
+        </div>
+    );
+};
+```
+
+
+## useField
+
+Podemos usar este hook de Formik para crear un componente reutilizable para nuestros campos:
+
+```jsx
+// Componente reutilizable
+import { ErrorMessage, useField } from "formik";
+
+interface Props {
+    label: string;
+    name: string;
+    placeholder?: string;
+    type?: "text" | "email" | "password";
+    [x: string]: any;
+}
+
+export const MyTextInput = ({ label, ...props }: Props) => {
+    const [field, meta] = useField(props);
+
+    return (
+        <>
+            <label htmlFor={ props.id || props.name }>{ label }</label>
+
+            <input
+                className="text-input"
+                { ...field }
+                { ...props }
+            />
+
+            <ErrorMessage component="span" name={ props.name } />
+
+            {
+                // meta.touched && meta.error && (
+                //     <span className="error">{ meta.error }</span>
+                // )
+            }
+        </>
+    );
+};
+
+// Cómo usarlo en otro componente (dentro de nuestro componente Formik
+import { Form, Formik } from "formik";
+import * as Yup from 'yup';
+
+import { MyCheckbox, MySelect, MyTextInput } from "../components";
+
+import "../styles/styles.css";
+
+export const FormikAbstraction = () => {
+    return (
+        <div>
+            <h1>Formik Abstraction</h1>
+
+            <Formik
+                initialValues={{
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    terms: false,
+                    jobType: "",
+                }}
+                onSubmit={ (values) => {
+                    console.log(values);
+                } }
+                validationSchema={ Yup.object({
+                    firstName: Yup.string()
+                        .max(15, "Must be 15 characters or less")
+                        .required("Required"),
+                    lastName: Yup.string()
+                        .max(10, "Must be 10 characters or less")
+                        .required("Required"),
+                    email: Yup.string()
+                        .email("Invalid email address")
+                        .required("Required"),
+                    jobType: Yup.string()
+                        .required("Required")
+                        .notOneOf(["it-jr"], "This option is not allowed"),
+                    terms: Yup.boolean()
+                        .oneOf([true], "You must accept terms and conditions"),
+                }) }
+            >
+                {
+                    (formik) => (
+                        <Form>
+                            <MyTextInput
+                                label="First Name"
+                                name="firstName"
+                                placeholder="Juan"
+                            />
+
+                            <MyTextInput
+                                label="Last Name"
+                                name="lastName"
+                                placeholder="David"
+                            />
+
+                            <MyTextInput
+                                label="Email"
+                                name="email"
+                                placeholder="juan@mail.com"
+                                type="email"
+                            />
+
+                            <MySelect label="Job Type" name="jobType">
+                                <option value="">Pick something</option>
+
+                                <option value="developer">Developer</option>
+
+                                <option value="designer">Designer</option>
+
+                                <option value="it-senior">IT Senior</option>
+
+                                <option value="it-jr">IT Jr.</option>
+                            </MySelect>
+
+                            <MyCheckbox
+                                label="Terms and conditions"
+                                name="terms"
+                            />
+
+                            <button type="submit">Submit</button>
+                        </Form>
+                    )
+                }
+            </Formik>
+        </div>
+    );
+};
+```
+
+
+## Formularios dinámicos
+
+Los podemos crear usando de ejemplo el siguiente componente con su JSON de campos:
+
+### Datos de campos del formulario
+```json
+[{
+        "label": "First Name",
+        "name": "firstName",
+        "placeholder": "Juan",
+        "type": "input",
+        "validations": [{
+                "type": "required"
+            },
+            {
+                "type": "minLength",
+                "value": 5
+            }
+        ],
+        "value": ""
+    },
+    {
+        "label": "Last Name",
+        "name": "lastName",
+        "placeholder": "David",
+        "type": "input",
+        "validations": [{
+            "type": "required"
+        }],
+        "value": ""
+    },
+    {
+        "label": "Email",
+        "name": "email",
+        "placeholder": "juan@mail.com",
+        "type": "email",
+        "validations": [{
+                "type": "required"
+            },
+            {
+                "type": "email"
+            }
+        ],
+        "value": ""
+    },
+    {
+        "label": "Favorite Game",
+        "name": "favoriteGame",
+        "options": [{
+                "id": 1,
+                "label": "Super Smash"
+            },
+            {
+                "id": 2,
+                "label": "Metal Gear"
+            },
+            {
+                "id": 3,
+                "label": "Resident Evil"
+            }
+        ],
+        "type": "select",
+        "validations": [{
+            "type": "required"
+        }],
+        "value": ""
+    }
+]
+```
+
+### Componente de formulario dinámico
+```jsx
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+
+import { MySelect, MyTextInput } from "../components";
+
+import formJson from "../data/custom-form.json";
+
+const initialValues: { [key: string]: any } = {};
+const requiredFields: { [key: string]: any } = {};
+
+for(const input of formJson) {
+    initialValues[input.name] = input.value;
+
+    if(!input.validations) continue;
+
+    let schema = Yup.string();
+
+    for(const rule of input.validations) {
+        if(rule.type === "required") {
+            schema = schema.required("This field is required");
+        }
+
+        if(rule.type === "minLength") {
+            schema = schema.min((rule as any).value || 2, `Minimum ${ (rule as any).value } characters`);
+        }
+
+        if(rule.type === "email") {
+            schema = schema.email("Invalid email address");
+        }
+    }
+
+    requiredFields[input.name] = schema;
+}
+
+const validationSchema = Yup.object({ ...requiredFields });
+
+export const DynamicForm = () => {
+    return (
+        <div>
+            <h1>Dynamic Form</h1>
+
+            <Formik
+                initialValues={ initialValues }
+                onSubmit={ (values) => {
+                    console.log(values);
+                } }
+                validationSchema={ validationSchema }
+            >
+                {
+                    (formik) => (
+                        <Form noValidate>
+                            {
+                                formJson.map(({ label, name, options, placeholder, type }) => {
+                                    if(
+                                        type === "input" ||
+                                        type === "password" ||
+                                        type === "email"
+                                    ) {
+                                        return (
+                                            <MyTextInput
+                                                key={ name }
+                                                label={ label }
+                                                name={ name }
+                                                placeholder={ placeholder }
+                                                type={ (type as any) }
+                                            />
+                                        );
+                                    }
+                                    else if(type === "select") {
+                                        return (
+                                            <MySelect
+                                                key={ name }
+                                                label={ label }
+                                                name={ name }
+                                            >
+                                                <option value="">Select an option</option>
+
+                                                {
+                                                    options?.map(({ id, label }) => (
+                                                        <option
+                                                            key={ id }
+                                                            value={ id }
+                                                        >
+                                                            { label }
+                                                        </option>
+                                                    ))
+                                                }
+                                            </MySelect>
+                                        );
+                                    }
+
+                                    throw new Error(`Type: ${ type } not supported`);
+                                })
+                            }
+
+                            <button type="submit">Submit</button>
+                        </Form>
+                    )
+                }
+            </Formik>
         </div>
     );
 };
