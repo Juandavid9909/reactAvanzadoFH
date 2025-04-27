@@ -1,8 +1,10 @@
 import {
+    DynamicForm,
     FormikAbstraction,
     FormikBasicPase,
     FormikComponents,
     FormikYupPage,
+    RegisterFormikPage,
     RegisterPage
 } from "../03-forms/pages";
 
@@ -45,5 +47,17 @@ export const routes: Route[] = [
         name: "Formik Abstraction",
         path: "/formik-abstraction",
         to: "/formik-abstraction"
+    },
+    {
+        Component: RegisterFormikPage,
+        name: "Formik Register",
+        path: "/formik-register",
+        to: "/formik-register"
+    },
+    {
+        Component: DynamicForm,
+        name: "Dynamic Form",
+        path: "/dynamic-form",
+        to: "/dynamic-form"
     },
 ];
