@@ -1,7 +1,10 @@
-import { FormikBasicPase } from "../03-forms/pages/FormikBasicPage";
-import { FormikComponents } from "../03-forms/pages/FormikComponents";
-import { FormikYupPage } from "../03-forms/pages/FormikYupPage";
-import { RegisterPage } from "../03-forms/pages/RegisterPage";
+import {
+    FormikAbstraction,
+    FormikBasicPase,
+    FormikComponents,
+    FormikYupPage,
+    RegisterPage
+} from "../03-forms/pages";
 
 type JSXComponent = () => React.JSX.Element;
 
@@ -36,5 +39,11 @@ export const routes: Route[] = [
         name: "Formik Components",
         path: "/formik-components",
         to: "/formik-components"
+    },
+    {
+        Component: FormikAbstraction,
+        name: "Formik Abstraction",
+        path: "/formik-abstraction",
+        to: "/formik-abstraction"
     },
 ];
