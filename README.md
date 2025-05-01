@@ -979,3 +979,42 @@ export const DynamicForm = () => {
 };
 ```
 
+
+# Storybook
+
+Nos permite crear nuestros componentes personalizados reutilizables que se pueden instalar de forma sencilla en nuestra organización.
+
+Para agregar Storybook a nuestro proyecto de React, podemos ejecutar el siguiente comando:
+
+```bash
+npm create storybook@latest
+```
+
+
+## Desplegar Storybook
+
+Para desplegar primero debemos crear nuestro ejecutable de Storybook:
+
+```bash
+npm run build-storybook
+```
+
+Hecho esto, Storybook nos generará una carpeta llamada `storybook-static`, y esta carpeta podemos desplegarla por ejemplo en Netlify arrastrando la carpeta con sus componentes.
+
+
+## Chromatic
+
+Nos permite dar un mejor aspecto en la interfaz para nuestro Storybook, para instalar podemos ejecutar el siguiente comando:
+
+```bash
+yarn add -D chromatic
+```
+
+Y para publicar nuestro Storybook, podemos ejecutar:
+
+```bash
+npx chromatic --project-token=<token>
+```
+
+Luego podemos ejecutar nuestro comando de Chromatic usando el comando `npm run chromatic` que ya fue agregado de forma automática.
+
