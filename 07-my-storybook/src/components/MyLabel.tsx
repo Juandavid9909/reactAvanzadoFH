@@ -1,6 +1,6 @@
 import "./MyLabel.css";
 
-interface Props {
+export interface Props {
     /**
      * Capitalize all letters
      */
