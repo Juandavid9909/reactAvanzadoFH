@@ -1018,3 +1018,66 @@ npx chromatic --project-token=<token>
 
 Luego podemos ejecutar nuestro comando de Chromatic usando el comando `npm run chromatic` que ya fue agregado de forma automática.
 
+
+# PWA
+
+Una PWA utiliza Service Workers, y tiene las siguientes características:
+
+- Acceso a la aplicación sin conexión.
+- Creación de base de datos local.
+- Push Notifications.
+- Uso de recursos nativos como la cámara y GPS.
+- Sincronización en segundo plano.
+- Etc.
+
+Los Service Workers lo que nos permiten hacer es transformar la forma en que nuestra app interactúa con el backend. Este intercepta las peticiones, está pendiente de las notificaciones push, corre en segundo plano y maneja el caché.
+
+Utiliza el protocolo HTTPS, funciona localmente con "localhost:xxx", y no funciona en desarrollo ejecutando `yarn start`.
+
+Para crear una aplicación de React PWA podemos ejecutar el siguiente comando:
+
+```bash
+npx create-react-app <nombre-app> --template cra-template-pwa
+```
+
+En este proyecto se generan 2 archivos para el Service Worker, sus nombres son `service-worker.js` y `serviceWorkerRegistration.js`, y con estos podemos empezar nuestra PWA, moviendo ambos archivos a nuestra carpeta `src` de nuestro proyecto.
+
+Hecho todo esto, para tener las dependencias podemos copiar lo que nos agregó a nuestro `package.json` todo lo relacionado con Workbox.
+
+```json
+"workbox-background-sync": "^5.1.3",
+"workbox-broadcast-update": "^5.1.3",
+"workbox-cacheable-response": "^5.1.3",
+"workbox-core": "^5.1.3",
+"workbox-expiration": "^5.1.3",
+"workbox-google-analytics": "^5.1.3",
+"workbox-navigation-preload": "^5.1.3",
+"workbox-precaching": "^5.1.3",
+"workbox-range-requests": "^5.1.3",
+"workbox-routing": "^5.1.3",
+"workbox-strategies": "^5.1.3",
+"workbox-streams": "^5.1.3"
+```
+
+Adicional tendremos que actualizar nuestro `index.js` para utilizar el Service Worker.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { CalendarApp } from './CalendarApp';
+
+import './styles.css';
+
+ReactDOM.render(
+    <CalendarApp /> ,
+    document.getElementById('root')
+);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();
+```
+
