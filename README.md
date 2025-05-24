@@ -1081,3 +1081,56 @@ ReactDOM.render(
 serviceWorkerRegistration.register();
 ```
 
+
+## Workbox CLI
+
+Para evitar hacer toda la carpintería desde 0 podemos instalar el siguiente paquete de NPM:
+
+```bash
+npm i -g workbox-cli
+```
+
+Luego de tener instalado el paquete de manera global y de haber creado nuestro build del proyecto podemos ejecutar el siguiente comando:
+
+```bash
+workbox wizard
+
+# No usamos workbox wizard si realizamos configuraciones manuales, sino que usamos el siguiente comando
+workbox injectManifest
+
+# Seleccionamos la carpeta donde está nuestro build
+# Seleccionamos todos los archivos
+# Dejamos la ruta del Service Worker por defecto
+# Aceptamos que cree el workbox-config.js
+# Indicamos que nuestra app no incluye parámetros de búsqueda en el start_url
+```
+
+
+## Detectar si el usuario está online u offline
+
+Para esto podemos instalar el siguiente paquete:
+
+```bash
+yarn add react-detect-offline
+```
+
+Y luego podemos usarlo de la siguiente forma:
+
+```jsx
+import { Offline, Online } from 'react-detect-offline';
+
+export const Navbar = () => {
+    return (
+        <>
+            <Online>
+                <span  className="text-success">Online</span>
+            </Online>
+
+            <Offline>
+                <span  className="text-danger">Offline - Peticiones serán guardadas</span>
+            </Offline>
+        </>
+    );
+};
+```
+
